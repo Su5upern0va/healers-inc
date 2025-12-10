@@ -1,6 +1,5 @@
 # 🏥 Healers Inc. (Working Title)
 
-> A cozy idle farm-factory game about herbal medicine, built with Java + LibGDX.  
 > **Status:** Early WIP – engine/framework setup only, core gameplay not implemented yet.
 
 ---
@@ -87,7 +86,7 @@ This repo currently serves as a **starting point** plus a place to track the gam
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/healers-inc.git
+git clone https://github.com/Su5upern0va/healers-inc
 cd healers-inc
 
 # Using Gradle wrapper (recommended)
@@ -178,6 +177,6 @@ _(Decide on a license and update this section, e.g. MIT, GPL, etc.)_
 ## 📬 Contact
 
 - Author: **Nova**
-- Project: [https://github.com/YOUR_USERNAME/healers-inc](https://github.com/YOUR_USERNAME/healers-inc)
+- Project: [https://github.com/Su5upern0va/healers-inc](https://github.com/Su5upern0va/healers-inc)
 
 > Thanks for checking out **Healers Inc.** – right now it’s mostly ideas and engine setup, but the clinic will open soon™.
