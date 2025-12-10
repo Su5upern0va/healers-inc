@@ -61,7 +61,7 @@ Right now this project is at a **very early stage**:
 
 - [x] Java & LibGDX project scaffolded
 - [x] Basic project structure / engine setup
-- [ ] Map generation
+- [x] Map generation
 - [ ] Herb nodes & harvesting
 - [ ] Production buildings and logistics
 - [ ] Orders, money, and reputation systems
