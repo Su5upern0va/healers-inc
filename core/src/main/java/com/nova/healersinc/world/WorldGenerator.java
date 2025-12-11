@@ -1,10 +1,13 @@
 package com.nova.healersinc.world;
 
 import java.util.Random;
+import java.util.List;
+import java.util.ArrayList;
 
 public class WorldGenerator {
 
     private final Random random;
+    private static final int BIOME_CHUNK_SIZE = 4;
 
     public WorldGenerator(long seed) {
         this.random = new Random(seed);
@@ -13,16 +16,23 @@ public class WorldGenerator {
     public WorldMap generate(int width, int height) {
         WorldMap worldMap = new WorldMap(width, height);
 
+        int chunksX = (int) Math.ceil(width / (float) BIOME_CHUNK_SIZE);
+        int chunksY = (int) Math.ceil(height / (float) BIOME_CHUNK_SIZE);
+
+        BiomeType[][] chunkBiomes = new BiomeType[chunksX][chunksY];
+
+        for (int cx = 0; cx < chunksX; cx++) {
+            for (int cy = 0; cy < chunksY; cy++) {
+                chunkBiomes[cx][cy] = pickBiomeForChunk(cx, cy, chunkBiomes);
+            }
+        }
+
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
+                int cx = x / BIOME_CHUNK_SIZE;
+                int cy = y / BIOME_CHUNK_SIZE;
 
-                BiomeType biome;
-
-                if (random.nextFloat() < 0.6f) {
-                    biome = BiomeType.SUNNY_MEADOW;
-                } else {
-                    biome = BiomeType.SHADY_GROVE;
-                }
+                BiomeType biome = chunkBiomes[cx][cy];
 
                 Tile tile = new Tile(x, y, biome);
                 maybePlaceHerbNode(tile, biome);
@@ -31,6 +41,32 @@ public class WorldGenerator {
         }
 
         return worldMap;
+    }
+
+    private BiomeType pickBiomeForChunk(int cx, int cy, BiomeType[][] chunkBiomes) {
+        if (cx == 0 && cy == 0) {
+            return randomBiome();
+        }
+
+        List<BiomeType> neighbors = new ArrayList<>();
+        if (cx > 0) {
+            neighbors.add(chunkBiomes[cx - 1][cy]);
+        }
+        if (cy > 0) {
+            neighbors.add(chunkBiomes[cx][cy - 1]);
+        }
+
+        if(!neighbors.isEmpty() && random.nextFloat() < 0.75f) {
+            return neighbors.get(random.nextInt(neighbors.size()));
+        } else {
+            return randomBiome();
+        }
+    }
+
+    private BiomeType randomBiome() {
+        return random.nextFloat() < 0.6f
+            ? BiomeType.SUNNY_MEADOW
+            : BiomeType.SHADY_GROVE;
     }
 
     private void maybePlaceHerbNode(Tile tile, BiomeType biome) {
