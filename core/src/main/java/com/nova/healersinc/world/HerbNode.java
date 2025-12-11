@@ -1,38 +1,29 @@
 package com.nova.healersinc.world;
 
-public class HerbNode {
-    private final HerbType type;
-    private final int maxYield;
-    private int currentYield;
+/**
+ * A harvestable herb node with potency characteristics.
+ * Herbs are a specific type of resource with quality/potency metrics.
+ */
+public class HerbNode extends ResourceNode<HerbType> {
     private final float potency;
-    private final float regrowthRate;
 
+    /**
+     * Creates a new herb node.
+     *
+     * @param type The herb type
+     * @param maxYield Maximum harvestable units
+     * @param potency Quality/strength of the herb (affects processing)
+     * @param regrowthRate Rate of herb regeneration per second
+     */
     public HerbNode(HerbType type, int maxYield, float potency, float regrowthRate) {
-        this.type = type;
-        this.maxYield = maxYield;
-        this.currentYield = maxYield;
+        super(type, maxYield, regrowthRate);
         this.potency = potency;
-        this.regrowthRate = regrowthRate;
     }
 
-    public HerbType getType() {
-        return type;
-    }
-
-    public int getCurrentYield() {
-        return currentYield;
-    }
-
-    public void harvest(int amount) {
-        currentYield = Math.max(0, currentYield - amount);
-    }
-
-    public void update(float deltaTime) {
-        if (currentYield < maxYield) {
-            currentYield += Math.max(1, (int) (regrowthRate * deltaTime));
-            if (currentYield > maxYield) {
-                currentYield = maxYield;
-            }
-        }
+    /**
+     * Gets the potency (quality) of this herb.
+     */
+    public float getPotency() {
+        return potency;
     }
 }
