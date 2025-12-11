@@ -65,6 +65,32 @@ public class WorldGenerator {
             neighbors.add(chunkBiomes[cx][cy - 1]);
         }
 
+        if(!neighbors.isEmpty() && random.nextFloat() < 0.75f) {
+            return neighbors.get(random.nextInt(neighbors.size()));
+        } else {
+            return randomBiome();
+        }
+    }
+
+    private BiomeType randomBiome() {
+        return random.nextFloat() < 0.6f
+            ? BiomeType.SUNNY_MEADOW
+            : BiomeType.SHADY_GROVE;
+    }
+
+    private BiomeType pickBiomeForChunk(int cx, int cy, BiomeType[][] chunkBiomes) {
+        if (cx == 0 && cy == 0) {
+            return randomBiome();
+        }
+
+        List<BiomeType> neighbors = new ArrayList<>();
+        if (cx > 0) {
+            neighbors.add(chunkBiomes[cx - 1][cy]);
+        }
+        if (cy > 0) {
+            neighbors.add(chunkBiomes[cx][cy - 1]);
+        }
+
         if (!neighbors.isEmpty() && random.nextFloat() < 0.75f) {
             return neighbors.get(random.nextInt(neighbors.size()));
         } else {
@@ -170,17 +196,17 @@ public class WorldGenerator {
         int chunkY = chunkBiomes[0].length;
 
         int cx = x / BIOME_CHUNK_SIZE;
-        int cy = y / BIOME_CHUNK_SIZE; // FIXED: was x, now y
+        int cy = y / BIOME_CHUNK_SIZE;
 
         BiomeType base = chunkBiomes[cx][cy];
 
         // how much biomes bleed into each other
-        float borderNoiseStrength = 0.25f; // 0 = straight edges, 1 = very noisy
+        float borderNoiseStrength = 0.25f; //0 = straight edges, 1 = looks like verdun 1918
 
         int localX = x % BIOME_CHUNK_SIZE;
-        int localY = y % BIOME_CHUNK_SIZE; // FIXED: was &, now %
+        int localY = y % BIOME_CHUNK_SIZE;
         int distToLeft = localX;
-        int distToRight = BIOME_CHUNK_SIZE - 1 - localX; // FIXED: was localY, now localX
+        int distToRight = BIOME_CHUNK_SIZE - 1 - localX;
         int distToBottom = localY;
         int distToTop = BIOME_CHUNK_SIZE - 1 - localY;
 

@@ -4,7 +4,7 @@ public class Tile {
     public final int x;
     public final int y;
 
-    private BiomeType biome;
+    public BiomeType biome;
     private ResourceNode<?> resourceNode;
 
     public Tile(int x, int y, BiomeType biome) {
