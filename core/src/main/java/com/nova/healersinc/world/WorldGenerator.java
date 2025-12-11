@@ -27,18 +27,27 @@ public class WorldGenerator {
             }
         }
 
+        // Store biomes for each tile and identify potential cluster centers
+        BiomeType[][] tileBiomes = new BiomeType[width][height];
+        List<int[]> clusterCenters = new ArrayList<>();
+
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                int cx = x / BIOME_CHUNK_SIZE;
-                int cy = y / BIOME_CHUNK_SIZE;
-
                 BiomeType biome = pickBiomeForTile(x, y, chunkBiomes);
+                tileBiomes[x][y] = biome;
 
-                Tile tile = new Tile(x, y, biome);
-                maybePlaceHerbNode(tile, biome);
-                worldMap.setTile(x, y, tile);
+                // Check if this tile should be a cluster center
+                if (shouldBeHerbClusterCenter(biome)) {
+                    clusterCenters.add(new int[]{x, y});
+                }
+
+                // Initialize tile with its biome (no herb node yet)
+                worldMap.setTile(x, y, new Tile(x, y, biome));
             }
         }
+
+        // Now, grow the clusters from the identified centers
+        growHerbClusters(worldMap, tileBiomes, clusterCenters);
 
         return worldMap;
     }
@@ -69,27 +78,105 @@ public class WorldGenerator {
             : BiomeType.SHADY_GROVE;
     }
 
-    private void maybePlaceHerbNode(Tile tile, BiomeType biome) {
+    private BiomeType pickBiomeForChunk(int cx, int cy, BiomeType[][] chunkBiomes) {
+        if (cx == 0 && cy == 0) {
+            return randomBiome();
+        }
+
+        List<BiomeType> neighbors = new ArrayList<>();
+        if (cx > 0) {
+            neighbors.add(chunkBiomes[cx - 1][cy]);
+        }
+        if (cy > 0) {
+            neighbors.add(chunkBiomes[cx][cy - 1]);
+        }
+
+        if (!neighbors.isEmpty() && random.nextFloat() < 0.75f) {
+            return neighbors.get(random.nextInt(neighbors.size()));
+        } else {
+            return randomBiome();
+        }
+    }
+
+    private BiomeType randomBiome() {
+        return random.nextFloat() < 0.6f
+            ? BiomeType.SUNNY_MEADOW
+            : BiomeType.SHADY_GROVE;
+    }
+
+    private boolean shouldBeHerbClusterCenter(BiomeType biome) {
         float roll = random.nextFloat();
 
         switch (biome) {
             case SUNNY_MEADOW:
-                //10% Chamomile, 5% Mint
-                if (roll < 0.10f) {
-                    tile.setResourceNode(createHerbNode(HerbType.CHAMOMILE));
-                } else if (roll < 0.15f) {
-                    tile.setResourceNode(createHerbNode(HerbType.MINT));
-                }
-                break;
+                // 1% chance for a cluster center
+                return roll < 0.01f;
 
             case SHADY_GROVE:
-                // 12% Mint, 7% Echinaecea
-                if (roll < 0.12f) {
-                    tile.setResourceNode(createHerbNode(HerbType.MINT));
-                } else if (roll < 0.19f) {
-                    tile.setResourceNode(createHerbNode(HerbType.ECHINACEA));
+                // 1% chance for a cluster center
+                return roll < 0.01f;
+        }
+        return false;
+    }
+
+    private void growHerbClusters(WorldMap worldMap, BiomeType[][] tileBiomes, List<int[]> clusterCenters) {
+        int width = worldMap.getWidth();
+        int height = worldMap.getHeight();
+
+        for (int[] centerCoords : clusterCenters) {
+            int centerX = centerCoords[0];
+            int centerY = centerCoords[1];
+
+            BiomeType biome = tileBiomes[centerX][centerY];
+            HerbType herbType = getHerbTypeForBiome(biome);
+
+            if (herbType == null) {
+                continue;
+            }
+
+            // Place the center herb
+            Tile centerTile = worldMap.getTile(centerX, centerY);
+            if (!centerTile.hasResourceNode()) {
+                centerTile.setResourceNode(createHerbNode(herbType));
+            }
+
+            // Grow 2-4 additional herbs around the center
+            int herbsToGrow = 2 + random.nextInt(3); // 2, 3, or 4
+
+            for (int i = 0; i < herbsToGrow; i++) {
+                int attempts = 0;
+                while (attempts < 10) {
+                    int dx = random.nextInt(3) - 1; // -1, 0, 1
+                    int dy = random.nextInt(3) - 1; // -1, 0, 1
+
+                    int nx = centerX + dx;
+                    int ny = centerY + dy;
+
+                    // Check bounds
+                    if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+                        Tile neighborTile = worldMap.getTile(nx, ny);
+
+                        if (!neighborTile.hasResourceNode()) {
+                            neighborTile.setResourceNode(createHerbNode(herbType));
+                            break;
+                        }
+                    }
+                    attempts++;
                 }
-                break;
+            }
+        }
+    }
+
+    private HerbType getHerbTypeForBiome(BiomeType biome) {
+        switch (biome) {
+            case SUNNY_MEADOW:
+                // 70% Chamomile, 30% Mint in sunny meadows
+                return random.nextFloat() < 0.7f ? HerbType.CHAMOMILE : HerbType.MINT;
+            case SHADY_GROVE:
+                // 60% Mint, 40% Echinacea in shady groves
+                return random.nextFloat() < 0.6f ? HerbType.MINT : HerbType.ECHINACEA;
+            default:
+                return HerbType.CHAMOMILE;
         }
     }
 
@@ -99,7 +186,7 @@ public class WorldGenerator {
                 return new HerbNode(type, 8, 1.1f, 0.12f);
             case ECHINACEA:
                 return new HerbNode(type, 12, 1.2f, 0.08f);
-            default: //CHAMOMILE
+            default: // CHAMOMILE
                 return new HerbNode(type, 10, 1.0f, 0.1f);
         }
     }
@@ -109,23 +196,23 @@ public class WorldGenerator {
         int chunkY = chunkBiomes[0].length;
 
         int cx = x / BIOME_CHUNK_SIZE;
-        int cy = x / BIOME_CHUNK_SIZE;
+        int cy = y / BIOME_CHUNK_SIZE;
 
         BiomeType base = chunkBiomes[cx][cy];
 
-        //this value is how much biomes bleed into each other
+        // how much biomes bleed into each other
         float borderNoiseStrength = 0.25f; //0 = straight edges, 1 = looks like verdun 1918
 
         int localX = x % BIOME_CHUNK_SIZE;
-        int localY = y & BIOME_CHUNK_SIZE;
+        int localY = y % BIOME_CHUNK_SIZE;
         int distToLeft = localX;
-        int distToRight = BIOME_CHUNK_SIZE - 1 - localY;
+        int distToRight = BIOME_CHUNK_SIZE - 1 - localX;
         int distToBottom = localY;
         int distToTop = BIOME_CHUNK_SIZE - 1 - localY;
 
         int minDistToEdge = Math.min(Math.min(distToLeft, distToRight), Math.min(distToBottom, distToTop));
 
-        if(minDistToEdge > 2) {
+        if (minDistToEdge > 2) {
             return base;
         }
 
@@ -138,10 +225,10 @@ public class WorldGenerator {
 
         List<BiomeType> neighborBiomes = new ArrayList<>();
 
-        if (cx > 0)             neighborBiomes.add(chunkBiomes[cx - 1][cy]);
-        if (cx < chunkX -1)     neighborBiomes.add(chunkBiomes[cx + 1][cy]);
-        if (cy > 0)             neighborBiomes.add(chunkBiomes[cx][cy - 1]);
-        if (cy < chunkY -1)     neighborBiomes.add(chunkBiomes[cx][cy + 1]);
+        if (cx > 0) neighborBiomes.add(chunkBiomes[cx - 1][cy]);
+        if (cx < chunkX - 1) neighborBiomes.add(chunkBiomes[cx + 1][cy]);
+        if (cy > 0) neighborBiomes.add(chunkBiomes[cx][cy - 1]);
+        if (cy < chunkY - 1) neighborBiomes.add(chunkBiomes[cx][cy + 1]);
 
         if (neighborBiomes.isEmpty()) {
             return base;

@@ -18,14 +18,7 @@ public class HealersIncGame extends ApplicationAdapter {
         shapeRenderer = new ShapeRenderer();
 
         WorldGenerator generator = new WorldGenerator(69161L);
-        worldMap = generator.generate(40, 25);
-
-        gameCamera = new GameCamera(1280, 720, worldMap);
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        gameCamera.resize(width, height);
+        worldMap = generator.generate(500, 500);
     }
 
     @Override
