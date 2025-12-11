@@ -11,6 +11,7 @@ public class HealersIncGame extends ApplicationAdapter {
 
     private ShapeRenderer shapeRenderer;
     private WorldMap worldMap;
+    private GameCamera gameCamera;
 
     @Override
     public void create() {
@@ -22,9 +23,13 @@ public class HealersIncGame extends ApplicationAdapter {
 
     @Override
     public void render() {
+        float delta = Gdx.graphics.getDeltaTime();
+        gameCamera.update(delta);
+
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        shapeRenderer.setProjectionMatrix(gameCamera.getCamera().combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
         for (int x = 0; x < worldMap.getWidth(); x++) {
