@@ -78,32 +78,6 @@ public class WorldGenerator {
             : BiomeType.SHADY_GROVE;
     }
 
-    private BiomeType pickBiomeForChunk(int cx, int cy, BiomeType[][] chunkBiomes) {
-        if (cx == 0 && cy == 0) {
-            return randomBiome();
-        }
-
-        List<BiomeType> neighbors = new ArrayList<>();
-        if (cx > 0) {
-            neighbors.add(chunkBiomes[cx - 1][cy]);
-        }
-        if (cy > 0) {
-            neighbors.add(chunkBiomes[cx][cy - 1]);
-        }
-
-        if (!neighbors.isEmpty() && random.nextFloat() < 0.75f) {
-            return neighbors.get(random.nextInt(neighbors.size()));
-        } else {
-            return randomBiome();
-        }
-    }
-
-    private BiomeType randomBiome() {
-        return random.nextFloat() < 0.6f
-            ? BiomeType.SUNNY_MEADOW
-            : BiomeType.SHADY_GROVE;
-    }
-
     private boolean shouldBeHerbClusterCenter(BiomeType biome) {
         float roll = random.nextFloat();
 
