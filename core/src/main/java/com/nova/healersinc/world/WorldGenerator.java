@@ -40,18 +40,18 @@ public class WorldGenerator {
             case SUNNY_MEADOW:
                 //10% Chamomile, 5% Mint
                 if (roll < 0.10f) {
-                    tile.setHerbNode(createHerbNode(HerbType.CHAMOMILE));
+                    tile.setResourceNode(createHerbNode(HerbType.CHAMOMILE));
                 } else if (roll < 0.15f) {
-                    tile.setHerbNode(createHerbNode(HerbType.MINT));
+                    tile.setResourceNode(createHerbNode(HerbType.MINT));
                 }
                 break;
 
             case SHADY_GROVE:
                 // 12% Mint, 7% Echinaecea
                 if (roll < 0.12f) {
-                    tile.setHerbNode(createHerbNode(HerbType.MINT));
+                    tile.setResourceNode(createHerbNode(HerbType.MINT));
                 } else if (roll < 0.19f) {
-                    tile.setHerbNode(createHerbNode(HerbType.ECHINACEA));
+                    tile.setResourceNode(createHerbNode(HerbType.ECHINACEA));
                 }
                 break;
         }
