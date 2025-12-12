@@ -4,11 +4,11 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.nova.healersinc.render.MapRenderer;
-import com.nova.healersinc.world.*;
+import com.nova.healersinc.world.WorldGenerator;
+import com.nova.healersinc.world.WorldMap;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class HealersIncGame extends ApplicationAdapter {
-
 
     private WorldMap worldMap;
     private GameCamera gameCamera;
