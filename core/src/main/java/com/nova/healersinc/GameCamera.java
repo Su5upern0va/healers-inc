@@ -9,11 +9,12 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.nova.healersinc.world.WorldMap;
 
-import javax.swing.text.View;
+import com.badlogic.gdx.InputProcessor;
 
 public class GameCamera {
     private OrthographicCamera camera;
     private Viewport viewport;
+    private InputProcessor inputProcessor;
 
     // Drag panning
     private float lastTouchX, lastTouchY;
@@ -37,7 +38,11 @@ public class GameCamera {
         camera.position.set(mapWidthWorld / 2f, mapHeightWorld / 2f, 0);
         camera.update();
 
-        Gdx.input.setInputProcessor(createInputProcessor());
+        inputProcessor = createInputProcessor();
+    }
+
+    public InputProcessor getInputProcessor() {
+        return inputProcessor;
     }
 
     public OrthographicCamera getCamera() {
