@@ -49,13 +49,17 @@ public class HealersIncGame extends ApplicationAdapter {
         // Update tile hover detection
         tileInteractionHandler.updateHover();
 
+        // Clear full screen (black letterbox areas)
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        // Apply viewport to set up correct glViewport with letterboxing
+        gameCamera.getViewport().apply();
 
         // Render world
         mapRenderer.render(worldMap, gameCamera.getCamera());
 
-        // Render UI on top
+        // Render UI on top (uses its own ScreenViewport)
         gameUI.render();
     }
 
