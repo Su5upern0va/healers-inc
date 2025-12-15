@@ -13,6 +13,7 @@ public class ResourceRegistry {
     private static final String CONFIG_PATH = "resources.json";
 
     private static final ObjectMap<Resource, ResourceDefinition> DEFINITIONS = new ObjectMap<>();
+    private static final ObjectMap<String , Resource> ID_TO_RESOURCE = new ObjectMap<>();
 
     private static boolean initialized = false;
 
@@ -22,7 +23,13 @@ public class ResourceRegistry {
     public static void init() {
         if (initialized) return;
 
+        buildResourceLookup();
+
         FileHandle file = Gdx.files.internal(CONFIG_PATH);
+        if (!file.exists()) {
+            throw new RuntimeException("Resource config file not found: " + CONFIG_PATH);
+        }
+
         Json json = new Json();
         ResourceConfig config = json.fromJson(ResourceConfig.class, file);
 
@@ -33,6 +40,13 @@ public class ResourceRegistry {
         }
 
         initialized = true;
+        Gdx.app.log("ResourceRegistry", "Initialized with " + DEFINITIONS.size + " resources.");
+    }
+
+    private static void buildResourceLookup() {
+        for (HerbType herb : HerbType.values()) {
+            ID_TO_RESOURCE.put(herb.name().toLowerCase(), herb);
+        }
     }
 
     private static ResourceDefinition toDefinition(ResourceConfig.ResourceEntry e) {
@@ -51,18 +65,14 @@ public class ResourceRegistry {
         );
     }
 
-    /**
-     * TEMP mapping: JSON id -> actual Resource implementation.
-     * For now we only have herbs, so we just map to HerbType.
-     * If id doesn't match, you can throw or log later.
-     */
     private static Resource mapIdToResource(String id) {
-        switch (id) {
-            case "chamomile": return HerbType.CHAMOMILE;
-            case "mint": return HerbType.MINT;
-            case "echinacea": return HerbType.ECHINACEA;
-            default: throw new IllegalArgumentException("Unknown resource id in JSON: " + id);
+        Resource resource = ID_TO_RESOURCE.get(id);
+        if (resource == null) {
+            throw new IllegalArgumentException("Unknown resource id in JSON: '" + id + "'. " +
+                "Make sure it matches an enum constant name (case-insensitive)."
+            );
         }
+        return resource;
     }
 
     public static ResourceDefinition getDefinition(Resource resource) {
