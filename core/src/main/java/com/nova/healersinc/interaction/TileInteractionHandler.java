@@ -3,6 +3,7 @@ package com.nova.healersinc.interaction;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.nova.healersinc.GameCamera;
 import com.nova.healersinc.ui.GameUI;
 import com.nova.healersinc.world.*;
@@ -50,18 +51,17 @@ public class TileInteractionHandler extends InputAdapter {
 
     /**
      * Convert screen coordinates to tile.
-     * Uses camera.unproject with the actual window dimensions since
-     * the FitViewport's virtual size doesn't affect the camera's projection matrix.
+     * Uses the viewport's screen bounds since viewport.apply() is called during rendering.
      */
     private Tile getTileAtScreen(int screenX, int screenY) {
-        unprojected.set(screenX, screenY, 0);
+        Viewport viewport = gameCamera.getViewport();
 
-        // Use full window dimensions - the camera's projection matrix
-        // already accounts for the viewport's world size and zoom
+        unprojected.set(screenX, screenY, 0);
         gameCamera.getCamera().unproject(unprojected,
-            0, 0,
-            Gdx.graphics.getWidth(),
-            Gdx.graphics.getHeight());
+            viewport.getScreenX(),
+            viewport.getScreenY(),
+            viewport.getScreenWidth(),
+            viewport.getScreenHeight());
 
         int tileX = (int) Math.floor(unprojected.x / WorldMap.TILE_SIZE);
         int tileY = (int) Math.floor(unprojected.y / WorldMap.TILE_SIZE);

@@ -35,6 +35,8 @@ public class GameUI implements Disposable {
     }
 
     public void render() {
+        // Apply UI viewport to reset glViewport to full screen
+        stage.getViewport().apply();
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }
