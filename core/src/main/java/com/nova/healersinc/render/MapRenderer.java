@@ -4,10 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import com.nova.healersinc.world.BiomeType;
-import com.nova.healersinc.world.HerbType;
-import com.nova.healersinc.world.Tile;
-import com.nova.healersinc.world.WorldMap;
+import com.nova.healersinc.world.*;
 
 public class MapRenderer {
 
@@ -81,7 +78,8 @@ public class MapRenderer {
      * Renders herb overlay on a tile
      */
     private void renderHerbOverlay(HerbType herbType, float x, float y) {
-        getHerbColor(herbType, tempColor);
+        ResourceDefinition def = ResourceRegistry.getDefinition(herbType);
+        tempColor.set(def.getVisual().getColor());
         shapeRenderer.setColor(tempColor);
 
         float herbSize = WorldMap.TILE_SIZE / 2f;
@@ -104,26 +102,6 @@ public class MapRenderer {
                 break;
             default:
                 outColor.set(0.5f, 0.5f, 0.5f, 1f); // fallback gray
-                break;
-        }
-    }
-
-    /**
-     * Gets the color for a specific herb type
-     */
-    private void getHerbColor(HerbType herbType, Color outColor) {
-        switch (herbType) {
-            case CHAMOMILE:
-                outColor.set(1f, 1f, 0.8f, 1f); // pale yellow
-                break;
-            case MINT:
-                outColor.set(0.4f, 1f, 0.8f, 1f); // mint green
-                break;
-            case ECHINACEA:
-                outColor.set(0.8f, 0.4f, 1f, 1f); // purple
-                break;
-            default:
-                outColor.set(1f, 1f, 1f, 1f); // fallback white
                 break;
         }
     }
