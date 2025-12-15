@@ -1,30 +1,22 @@
 package com.nova.healersinc.interaction;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.nova.healersinc.GameCamera;
 import com.nova.healersinc.ui.GameUI;
 import com.nova.healersinc.world.*;
 
 /**
- * Handles tile hover detection and click-to-place functionality.
- * Converts screen coordinates to tile coordinates and manages tile interactions.
+ * Handles tile hover detection for displaying tile information tooltips.
+ * Converts screen coordinates to tile coordinates.
  */
 public class TileInteractionHandler extends InputAdapter {
-
-    private static final float CLICK_THRESHOLD = 5f;
 
     private final WorldMap worldMap;
     private final GameCamera gameCamera;
     private final GameUI gameUI;
     private final Vector3 unprojected;
-
-    private float touchDownX;
-    private float touchDownY;
 
     public TileInteractionHandler(WorldMap worldMap, GameCamera gameCamera, GameUI gameUI) {
         this.worldMap = worldMap;
@@ -54,45 +46,6 @@ public class TileInteractionHandler extends InputAdapter {
         } else {
             gameUI.hideTooltip();
         }
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if (button == Input.Buttons.LEFT) {
-            touchDownX = screenX;
-            touchDownY = screenY;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        if (button != Input.Buttons.LEFT) return false;
-
-        // Check if this was a click (not a drag)
-        float dx = Math.abs(screenX - touchDownX);
-        float dy = Math.abs(screenY - touchDownY);
-        if (dx > CLICK_THRESHOLD || dy > CLICK_THRESHOLD) {
-            return false;
-        }
-
-        // Check if click was on UI
-        float stageY = Gdx.graphics.getHeight() - screenY;
-        if (gameUI.getStage().hit(screenX, stageY, true) != null) {
-            return false;
-        }
-
-        HerbType selectedHerb = gameUI.getSelectedHerbType();
-        if (selectedHerb == null) return false;
-
-        Tile tile = getTileAtScreen(screenX, screenY);
-        if (tile != null && !tile.hasResourceNode()) {
-            HerbNode herbNode = createHerbNode(selectedHerb);
-            tile.setResourceNode(herbNode);
-            return true;
-        }
-
-        return false;
     }
 
     /**
@@ -157,19 +110,5 @@ public class TileInteractionHandler extends InputAdapter {
             }
         }
         return result.toString();
-    }
-
-    /**
-     * Create a new HerbNode with default stats (matching WorldGenerator)
-     */
-    private HerbNode createHerbNode(HerbType type) {
-        switch (type) {
-            case MINT:
-                return new HerbNode(type, 8, 1.1f, 0.12f);
-            case ECHINACEA:
-                return new HerbNode(type, 12, 1.2f, 0.08f);
-            default: // CHAMOMILE
-                return new HerbNode(type, 10, 1.0f, 0.1f);
-        }
     }
 }
