@@ -5,7 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.nova.healersinc.world.WorldMap;
 
@@ -31,7 +31,7 @@ public class GameCamera {
         this.worldMap = worldMap;
 
         camera = new OrthographicCamera();
-        viewport = new FitViewport(viewportWidth, viewportHeight, camera);
+        viewport = new ExtendViewport(viewportWidth, viewportHeight, camera);
 
         float mapWidthWorld = worldMap.getWidth() * WorldMap.TILE_SIZE;
         float mapHeightWorld = worldMap.getHeight() * WorldMap.TILE_SIZE;
