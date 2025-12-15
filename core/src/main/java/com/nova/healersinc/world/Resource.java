@@ -11,4 +11,7 @@ public interface Resource {
      * For enums, this is typically the enum constant name.
      */
     String name();
+    default ResourceDefinition getDefinition() {
+        return ResourceRegistry.getDefinition(this);
+    }
 }

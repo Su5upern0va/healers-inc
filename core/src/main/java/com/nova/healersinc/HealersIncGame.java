@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.nova.healersinc.interaction.TileInteractionHandler;
 import com.nova.healersinc.render.MapRenderer;
 import com.nova.healersinc.ui.GameUI;
+import com.nova.healersinc.world.ResourceRegistry;
 import com.nova.healersinc.world.WorldGenerator;
 import com.nova.healersinc.world.WorldMap;
 
@@ -21,6 +22,8 @@ public class HealersIncGame extends ApplicationAdapter {
 
     @Override
     public void create() {
+
+        ResourceRegistry.init();
         WorldGenerator generator = new WorldGenerator(69161L);
         worldMap = generator.generate(500, 500);
 
