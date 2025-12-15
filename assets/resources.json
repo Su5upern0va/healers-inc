@@ -1,0 +1,46 @@
+{
+  "resources": [
+    {
+      "id": "chamomile",
+      "name": "Chamomile",
+      "category": "herb",
+      "visual": {
+        "color": "#FFFFCC",
+        "texture": "textures/herbs/chamomile.png",
+        "icon": "icons/herbs/chamomile.png"
+      },
+      "properties": {
+        "stackSize": 100,
+        "baseValue": 5
+      }
+    },
+    {
+      "id": "mint",
+      "name": "Mint",
+      "category": "herb",
+      "visual": {
+        "color": "#66FFCC",
+        "texture": "textures/herbs/mint.png",
+        "icon": "icons/herbs/mint.png"
+      },
+      "properties": {
+        "stackSize": 100,
+        "baseValue": 4
+      }
+    },
+    {
+      "id": "echinacea",
+      "name": "Echinacea",
+      "category": "herb",
+      "visual": {
+        "color": "#CC66FF",
+        "texture": "textures/herbs/echinacea.png",
+        "icon": "icons/herbs/echinacea.png"
+      },
+      "properties": {
+        "stackSize": 100,
+        "baseValue": 6
+      }
+    }
+  ]
+}
