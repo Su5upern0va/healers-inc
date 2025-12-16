@@ -93,16 +93,11 @@ public class MapRenderer {
      * Gets the color for a specific biome type
      */
     private void getBiomeColor(BiomeType biome, Color outColor) {
-        switch (biome) {
-            case SUNNY_MEADOW:
-                outColor.set(0.3f, 0.8f, 0.3f, 1f);
-                break;
-            case SHADY_GROVE:
-                outColor.set(0.1f, 0.4f, 0.1f, 1f);
-                break;
-            default:
-                outColor.set(0.5f, 0.5f, 0.5f, 1f); // fallback gray
-                break;
+        if (biome != null) {
+            BiomeDefinition def = BiomeRegistry.getDefinition(biome);
+            outColor.set(def.getVisual().getColor());
+        } else {
+            outColor.set(Color.GRAY);
         }
     }
 

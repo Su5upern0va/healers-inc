@@ -1,0 +1,61 @@
+{
+  "biomes": [
+    {
+      "id": "mild_meadow",
+      "name": "Mild Meadow",
+      "worldGenWeight": 1.0,
+      "visual": {
+        "color": "4DCC4DFF",
+        "texture": null
+      },
+      "spawnRules": {
+        "clusterCenterChance": 0.01,
+        "resources": [
+          {
+            "resourceId": "chamomile",
+            "weight": 0.7
+          },
+          {
+            "resourceId": "mint",
+            "weight": 0.3
+          }
+        ]
+      }
+    },
+    {
+      "id": "groovy_grove",
+      "name": "Groovy Grove",
+      "worldGenWeight": 0.8,
+      "visual": {
+        "color": "1A661AFF",
+        "texture": null
+      },
+      "spawnRules": {
+        "clusterCenterChance": 0.005,
+        "resources": [
+          {
+            "resourceId": "mint",
+            "weight": 0.6
+          },
+          {
+            "resourceId": "echinacea",
+            "weight": 0.4
+          }
+        ]
+      }
+    },
+    {
+      "id": "spooky_swamp",
+      "name": "Spooky Swamp",
+      "worldGenWeight": 0.2,
+      "visual": {
+        "color": "0D401AFF",
+        "texture": null
+      },
+      "spawnRules": {
+        "clusterCenterChance": 0.0,
+        "resources": []
+      }
+    }
+  ]
+}
