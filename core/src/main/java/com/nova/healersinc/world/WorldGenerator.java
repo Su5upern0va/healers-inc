@@ -132,16 +132,8 @@ public class WorldGenerator {
     }
 
     private HerbType getHerbTypeForBiome(BiomeType biome) {
-        switch (biome) {
-            case MILD_MEADOW:
-                // 70% Chamomile, 30% Mint in sunny meadows
-                return random.nextFloat() < 0.7f ? HerbType.CHAMOMILE : HerbType.MINT;
-            case GROOVY_GROVE:
-                // 60% Mint, 40% Echinacea in shady groves
-                return random.nextFloat() < 0.6f ? HerbType.MINT : HerbType.ECHINACEA;
-            default:
-                return HerbType.CHAMOMILE;
-        }
+        BiomeDefinition def = BiomeRegistry.getDefinition(biome);
+        return def.getSpawnRules().pickRandomHerb(random);
     }
 
     private HerbNode createHerbNode(HerbType type) {
