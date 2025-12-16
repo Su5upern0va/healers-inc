@@ -12,9 +12,9 @@ import com.nova.healersinc.world.WorldMap;
 import com.badlogic.gdx.InputProcessor;
 
 public class GameCamera {
-    private OrthographicCamera camera;
-    private Viewport viewport;
-    private InputProcessor inputProcessor;
+    private final OrthographicCamera camera;
+    private final Viewport viewport;
+    private final InputProcessor inputProcessor;
 
     // Drag panning
     private float lastTouchX, lastTouchY;
@@ -24,7 +24,7 @@ public class GameCamera {
     private static final float MIN_ZOOM = 0.5f;
     private static final float MAX_ZOOM = 3.0f;
 
-    private WorldMap worldMap;
+    private final WorldMap worldMap;
 
     public GameCamera(int viewportWidth, int viewportHeight, WorldMap worldMap) {
 
@@ -135,22 +135,20 @@ public class GameCamera {
         float halfEffectiveViewportWidth = effectiveViewportWidth * 0.5f;
         float halfEffectiveViewportHeight = effectiveViewportHeight * 0.5f;
 
-        float minX = halfEffectiveViewportWidth;
         float maxX = mapWidthWorld - halfEffectiveViewportWidth;
-        float minY = halfEffectiveViewportHeight;
         float maxY = mapHeightWorld - halfEffectiveViewportHeight;
 
         // keep map centered if the map is smaller then the viewport
         if (mapWidthWorld < effectiveViewportWidth) {
             camera.position.x = mapWidthWorld / 2f;
         } else {
-            camera.position.x = MathUtils.clamp(camera.position.x, minX, maxX);
+            camera.position.x = MathUtils.clamp(camera.position.x, halfEffectiveViewportWidth, maxX);
         }
 
         if (mapHeightWorld < effectiveViewportHeight) {
             camera.position.y = mapHeightWorld / 2f;
         } else {
-            camera.position.y = MathUtils.clamp(camera.position.y, minY, maxY);
+            camera.position.y = MathUtils.clamp(camera.position.y, halfEffectiveViewportHeight, maxY);
         }
     }
 }
