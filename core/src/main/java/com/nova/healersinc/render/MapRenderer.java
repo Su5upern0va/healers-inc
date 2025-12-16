@@ -94,10 +94,10 @@ public class MapRenderer {
      */
     private void getBiomeColor(BiomeType biome, Color outColor) {
         switch (biome) {
-            case SUNNY_MEADOW:
+            case MILD_MEADOW:
                 outColor.set(0.3f, 0.8f, 0.3f, 1f);
                 break;
-            case SHADY_GROVE:
+            case GROOVY_GROVE:
                 outColor.set(0.1f, 0.4f, 0.1f, 1f);
                 break;
             default:

@@ -74,19 +74,19 @@ public class WorldGenerator {
 
     private BiomeType randomBiome() {
         return random.nextFloat() < 0.6f
-            ? BiomeType.SUNNY_MEADOW
-            : BiomeType.SHADY_GROVE;
+            ? BiomeType.MILD_MEADOW
+            : BiomeType.GROOVY_GROVE;
     }
 
     private boolean shouldBeHerbClusterCenter(BiomeType biome) {
         float roll = random.nextFloat();
 
         switch (biome) {
-            case SUNNY_MEADOW:
+            case MILD_MEADOW:
                 // 1% chance for a cluster center
                 return roll < 0.01f;
 
-            case SHADY_GROVE:
+            case GROOVY_GROVE:
                 // 1% chance for a cluster center
                 return roll < 0.005f;
         }
@@ -143,10 +143,10 @@ public class WorldGenerator {
 
     private HerbType getHerbTypeForBiome(BiomeType biome) {
         switch (biome) {
-            case SUNNY_MEADOW:
+            case MILD_MEADOW:
                 // 70% Chamomile, 30% Mint in sunny meadows
                 return random.nextFloat() < 0.7f ? HerbType.CHAMOMILE : HerbType.MINT;
-            case SHADY_GROVE:
+            case GROOVY_GROVE:
                 // 60% Mint, 40% Echinacea in shady groves
                 return random.nextFloat() < 0.6f ? HerbType.MINT : HerbType.ECHINACEA;
             default:
