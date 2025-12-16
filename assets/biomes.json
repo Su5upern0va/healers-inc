@@ -3,6 +3,7 @@
     {
       "id": "mild_meadow",
       "name": "Mild Meadow",
+      "worldGenWeight": 1.0,
       "visual": {
         "color": "4DCC4DFF",
         "texture": null
@@ -24,6 +25,7 @@
     {
       "id": "groovy_grove",
       "name": "Groovy Grove",
+      "worldGenWeight": 0.8,
       "visual": {
         "color": "1A661AFF",
         "texture": null
@@ -45,6 +47,7 @@
     {
       "id": "spooky_swamp",
       "name": "Spooky Swamp",
+      "worldGenWeight": 0.2,
       "visual": {
         "color": "0D401AFF",
         "texture": null

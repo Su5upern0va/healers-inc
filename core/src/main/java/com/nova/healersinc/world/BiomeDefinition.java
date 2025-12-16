@@ -8,12 +8,14 @@ import java.util.Random;
 public class BiomeDefinition {
     private final String id;
     private final String name;
+    private final Float worldGenWeight;
     private final Visual visual;
     private final SpawnRules spawnRules;
 
-    public BiomeDefinition(String id, String name, Visual visual, SpawnRules spawnRules) {
+    public BiomeDefinition(String id, String name, float worldGenWeight, Visual visual, SpawnRules spawnRules) {
         this.id = id;
         this.name = name;
+        this.worldGenWeight = worldGenWeight;
         this.visual = visual;
         this.spawnRules = spawnRules;
     }
@@ -24,6 +26,10 @@ public class BiomeDefinition {
 
     public String getName() {
         return name;
+    }
+
+    public Float getWorldGenWeight() {
+        return worldGenWeight;
     }
 
     public Visual getVisual() {

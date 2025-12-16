@@ -8,10 +8,12 @@ import com.badlogic.gdx.utils.ObjectMap;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class BiomeRegistry {
 
     private static final String CONFIG_PATH = "biomes.json";
+    private static float totalWorldGenWeight = 0f;
 
     private static final ObjectMap<BiomeType, BiomeDefinition> DEFINITIONS = new ObjectMap<>();
     private static final ObjectMap<String, BiomeType> ID_TO_BIOME = new ObjectMap<>();
@@ -38,6 +40,8 @@ public class BiomeRegistry {
             BiomeDefinition definition = toDefinition(entry);
             BiomeType biomeKey = mapIdToBiome(entry.id);
             DEFINITIONS.put(biomeKey, definition);
+
+            totalWorldGenWeight += definition.getWorldGenWeight();
         }
 
         initialized = true;
@@ -66,7 +70,7 @@ public class BiomeRegistry {
             resourceSpawns
         );
 
-        return new BiomeDefinition(e.id, e.name, visual, spawnRules);
+        return new BiomeDefinition(e.id, e.name, e.worldGenWeight, visual, spawnRules);
     }
 
     private static BiomeType mapIdToBiome(String id) {
@@ -97,5 +101,33 @@ public class BiomeRegistry {
         }
 
         return def;
+    }
+
+    public static BiomeType pickRandomBiome(Random random) {
+        if (!initialized) {
+            throw new IllegalStateException("BiomeRegistry not initialized! Call BiomeRegistry.init() during startup.");
+        }
+        if (totalWorldGenWeight <= 0f) {
+            // fallback
+            return BiomeType.MILD_MEADOW;
+        }
+
+        float roll = random.nextFloat() * totalWorldGenWeight;
+        float cumualtive = 0f;
+
+        for (ObjectMap.Entry<BiomeType, BiomeDefinition> entry : DEFINITIONS) {
+            float w = entry.value.getWorldGenWeight();
+            if (w <= 0f) {
+                continue;
+            }
+
+            cumualtive += w;
+            if (roll <= cumualtive) {
+                return entry.key;
+            }
+        }
+
+        // in case of float rounding errors
+        return DEFINITIONS.keys().next();
     }
 }

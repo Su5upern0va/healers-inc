@@ -8,6 +8,7 @@ public class BiomeConfig {
     public static class BiomeEntry {
         public String id;
         public String name;
+        public float worldGenWeight;
         public Visual visual;
         public SpawnRules spawnRules;
     }

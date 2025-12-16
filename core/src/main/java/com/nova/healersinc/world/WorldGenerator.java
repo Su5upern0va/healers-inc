@@ -73,9 +73,7 @@ public class WorldGenerator {
     }
 
     private BiomeType randomBiome() {
-        return random.nextFloat() < 0.6f
-            ? BiomeType.MILD_MEADOW
-            : BiomeType.GROOVY_GROVE;
+        return BiomeRegistry.pickRandomBiome(random);
     }
 
     private boolean shouldBeHerbClusterCenter(BiomeType biome) {
