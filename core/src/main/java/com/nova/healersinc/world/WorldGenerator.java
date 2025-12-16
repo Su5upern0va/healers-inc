@@ -79,18 +79,8 @@ public class WorldGenerator {
     }
 
     private boolean shouldBeHerbClusterCenter(BiomeType biome) {
-        float roll = random.nextFloat();
-
-        switch (biome) {
-            case MILD_MEADOW:
-                // 1% chance for a cluster center
-                return roll < 0.01f;
-
-            case GROOVY_GROVE:
-                // 1% chance for a cluster center
-                return roll < 0.005f;
-        }
-        return false;
+        BiomeDefinition def = BiomeRegistry.getDefinition(biome);
+        return random.nextFloat() < def.getSpawnRules().getClusterCenterChance();
     }
 
     private void growHerbClusters(WorldMap worldMap, BiomeType[][] tileBiomes, List<int[]> clusterCenters) {
