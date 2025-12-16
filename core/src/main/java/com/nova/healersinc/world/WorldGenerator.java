@@ -88,7 +88,7 @@ public class WorldGenerator {
 
             case SHADY_GROVE:
                 // 1% chance for a cluster center
-                return roll < 0.01f;
+                return roll < 0.005f;
         }
         return false;
     }
