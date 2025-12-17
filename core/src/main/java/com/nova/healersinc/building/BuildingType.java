@@ -1,7 +1,7 @@
 package com.nova.healersinc.building;
 
 public enum BuildingType {
-    HERVESTER("Harvester", "Harvests herbs from nearby nodes", 100),
+    HARVESTER("Harvester", "Harvests herbs from nearby nodes", 100),
     DRYING_RACK("Drying Rack", "Dries fresh herbs", 150),
     STORAGE("Storage", "Stores items", 50);
 
