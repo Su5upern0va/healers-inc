@@ -1,16 +1,17 @@
-package com.nova.healersinc;
+package com.nova.healersinc.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
+import com.nova.healersinc.camera.GameCamera;
 import com.nova.healersinc.interaction.TileInteractionHandler;
 import com.nova.healersinc.render.MapRenderer;
 import com.nova.healersinc.ui.GameUI;
-import com.nova.healersinc.world.BiomeRegistry;
-import com.nova.healersinc.world.ResourceRegistry;
-import com.nova.healersinc.world.WorldGenerator;
-import com.nova.healersinc.world.WorldMap;
+import com.nova.healersinc.world.biome.BiomeRegistry;
+import com.nova.healersinc.world.resource.ResourceRegistry;
+import com.nova.healersinc.world.map.WorldGenerator;
+import com.nova.healersinc.world.map.WorldMap;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class HealersIncGame extends ApplicationAdapter {

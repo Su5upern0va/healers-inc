@@ -1,4 +1,6 @@
-package com.nova.healersinc.world;
+package com.nova.healersinc.world.herb;
+
+import com.nova.healersinc.world.resource.ResourceNode;
 
 /**
  * A harvestable herb node with potency characteristics.

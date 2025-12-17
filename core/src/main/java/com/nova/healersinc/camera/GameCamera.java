@@ -1,4 +1,4 @@
-package com.nova.healersinc;
+package com.nova.healersinc.camera;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.nova.healersinc.world.WorldMap;
+import com.nova.healersinc.world.map.WorldMap;
 
 import com.badlogic.gdx.InputProcessor;
 

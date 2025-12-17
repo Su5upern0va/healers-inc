@@ -1,6 +1,7 @@
-package com.nova.healersinc.world;
+package com.nova.healersinc.world.biome;
 
 import com.badlogic.gdx.graphics.Color;
+import com.nova.healersinc.world.herb.HerbType;
 
 import java.util.List;
 import java.util.Random;

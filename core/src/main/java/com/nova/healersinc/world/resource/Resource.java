@@ -1,4 +1,4 @@
-package com.nova.healersinc.world;
+package com.nova.healersinc.world.resource;
 
 /**
  * Marker interface for all harvestable resource types in the game.

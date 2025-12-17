@@ -1,4 +1,4 @@
-package com.nova.healersinc.world;
+package com.nova.healersinc.world.resource;
 
 /**
  * Abstract base class for harvestable resource nodes in the world.

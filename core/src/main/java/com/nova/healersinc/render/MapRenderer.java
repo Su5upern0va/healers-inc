@@ -4,7 +4,14 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import com.nova.healersinc.world.*;
+import com.nova.healersinc.world.biome.BiomeDefinition;
+import com.nova.healersinc.world.biome.BiomeRegistry;
+import com.nova.healersinc.world.biome.BiomeType;
+import com.nova.healersinc.world.herb.HerbType;
+import com.nova.healersinc.world.map.Tile;
+import com.nova.healersinc.world.map.WorldMap;
+import com.nova.healersinc.world.resource.ResourceDefinition;
+import com.nova.healersinc.world.resource.ResourceRegistry;
 
 public class MapRenderer {
 

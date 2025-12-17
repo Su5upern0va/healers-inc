@@ -1,4 +1,10 @@
-package com.nova.healersinc.world;
+package com.nova.healersinc.world.map;
+
+import com.nova.healersinc.world.biome.BiomeDefinition;
+import com.nova.healersinc.world.biome.BiomeRegistry;
+import com.nova.healersinc.world.biome.BiomeType;
+import com.nova.healersinc.world.herb.HerbNode;
+import com.nova.healersinc.world.herb.HerbType;
 
 import java.util.Random;
 import java.util.List;

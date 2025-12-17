@@ -1,10 +1,11 @@
-package com.nova.healersinc.world;
+package com.nova.healersinc.world.resource;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.nova.healersinc.world.herb.HerbType;
 
 
 public class ResourceRegistry {

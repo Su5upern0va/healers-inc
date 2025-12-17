@@ -1,4 +1,4 @@
-package com.nova.healersinc.world;
+package com.nova.healersinc.world.biome;
 
 public enum BiomeType {
     MILD_MEADOW,

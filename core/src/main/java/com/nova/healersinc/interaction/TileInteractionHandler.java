@@ -4,9 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.nova.healersinc.GameCamera;
+import com.nova.healersinc.camera.GameCamera;
 import com.nova.healersinc.ui.GameUI;
-import com.nova.healersinc.world.*;
+import com.nova.healersinc.world.biome.BiomeType;
+import com.nova.healersinc.world.herb.HerbNode;
+import com.nova.healersinc.world.map.Tile;
+import com.nova.healersinc.world.map.WorldMap;
+import com.nova.healersinc.world.resource.ResourceNode;
 
 /**
  * Handles tile hover detection for displaying tile information tooltips.

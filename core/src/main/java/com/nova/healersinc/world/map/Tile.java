@@ -1,4 +1,8 @@
-package com.nova.healersinc.world;
+package com.nova.healersinc.world.map;
+
+import com.nova.healersinc.world.biome.BiomeType;
+import com.nova.healersinc.world.herb.HerbNode;
+import com.nova.healersinc.world.resource.ResourceNode;
 
 public class Tile {
     public final int x;
