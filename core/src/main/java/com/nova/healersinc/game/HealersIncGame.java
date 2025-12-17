@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
+import com.nova.healersinc.building.BuildingManager;
 import com.nova.healersinc.camera.GameCamera;
 import com.nova.healersinc.interaction.TileInteractionHandler;
 import com.nova.healersinc.render.MapRenderer;
@@ -21,6 +22,7 @@ public class HealersIncGame extends ApplicationAdapter {
     private MapRenderer mapRenderer;
     private GameUI gameUI;
     private TileInteractionHandler tileInteractionHandler;
+    private BuildingManager buildingManager;
 
     @Override
     public void create() {
@@ -32,12 +34,13 @@ public class HealersIncGame extends ApplicationAdapter {
 
         gameCamera = new GameCamera(640, 480, worldMap);
         mapRenderer = new MapRenderer();
+        buildingManager = new BuildingManager(worldMap);
 
         // Initialize UI layer
         gameUI = new GameUI();
 
         // Initialize tile interaction handler
-        tileInteractionHandler = new TileInteractionHandler(worldMap, gameCamera, gameUI);
+        tileInteractionHandler = new TileInteractionHandler(worldMap, gameCamera, gameUI, buildingManager);
 
         // Setup input multiplexer: Stage first, then tile interaction, then camera pan/zoom
         InputMultiplexer multiplexer = new InputMultiplexer();
@@ -61,6 +64,9 @@ public class HealersIncGame extends ApplicationAdapter {
 
         // Apply viewport to set up correct glViewport with letterboxing
         gameCamera.getViewport().apply();
+
+        // Update buildings
+        buildingManager.update(delta);
 
         // Render world
         mapRenderer.render(worldMap, gameCamera.getCamera());

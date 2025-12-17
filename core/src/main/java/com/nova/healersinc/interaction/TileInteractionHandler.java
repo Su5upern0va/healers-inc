@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.nova.healersinc.building.BuildingManager;
+import com.nova.healersinc.building.BuildingType;
 import com.nova.healersinc.camera.GameCamera;
 import com.nova.healersinc.ui.GameUI;
 import com.nova.healersinc.world.biome.BiomeType;
@@ -22,12 +24,15 @@ public class TileInteractionHandler extends InputAdapter {
     private final GameCamera gameCamera;
     private final GameUI gameUI;
     private final Vector3 unprojected;
+    private final BuildingManager buildingManager;
+    private BuildingType selectedBuildingType = null;
 
-    public TileInteractionHandler(WorldMap worldMap, GameCamera gameCamera, GameUI gameUI) {
+    public TileInteractionHandler(WorldMap worldMap, GameCamera gameCamera, GameUI gameUI, BuildingManager buildingManager) {
         this.worldMap = worldMap;
         this.gameCamera = gameCamera;
         this.gameUI = gameUI;
         this.unprojected = new Vector3();
+        this.buildingManager = buildingManager;
     }
 
     /**
@@ -114,5 +119,38 @@ public class TileInteractionHandler extends InputAdapter {
             }
         }
         return result.toString();
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        // Only handle left click
+        if (button != 0) return false;
+
+        // Check if mouse is over UI
+        float stageY = Gdx.graphics.getHeight() - screenY;
+        if (gameUI.getStage().hit(screenX, stageY, true) != null) {
+            return false;
+        }
+
+        Tile tile = getTileAtScreen(screenX, screenY);
+        if (tile == null) return false;
+
+        // Handle building placement
+        if (selectedBuildingType != null) {
+            if (buildingManager.placeBuilding(tile, selectedBuildingType)) {
+                System.out.println("Placed " + selectedBuildingType.getDisplayName() + " at (" + tile.x + ", " + tile.y + ")" );
+                selectedBuildingType = null; // clear the selection after placement
+                gameUI.clearBuildingSelection();
+            } else {
+                System.out.println("Failed to place " + selectedBuildingType.getDisplayName() + " at (" + tile.x + ", " + tile.y + ")" );
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    public void setSelectedBuildingType(BuildingType type) {
+        this.selectedBuildingType = type;
     }
 }
