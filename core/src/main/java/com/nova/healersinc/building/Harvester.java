@@ -24,7 +24,7 @@ public class Harvester extends Building {
     private int totalHarvested;
 
     public Harvester(Tile tile, WorldMap worldMap) {
-        super(tile, BuildingType.HERVESTER);
+        super(tile, BuildingType.HARVESTER);
         this.worldMap = worldMap;
         this.nearbyHerbNodes = new ArrayList<>();
         this.harvestTimer = 0.0f;
