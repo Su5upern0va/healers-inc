@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.nova.healersinc.building.Building;
+import com.nova.healersinc.building.BuildingType;
 import com.nova.healersinc.world.biome.BiomeDefinition;
 import com.nova.healersinc.world.biome.BiomeRegistry;
 import com.nova.healersinc.world.biome.BiomeType;
@@ -54,7 +56,7 @@ public class MapRenderer {
     }
 
     /**
-     * Renders a single tile (biome base + resource overlay)
+     * Renders a single tile (biome base + resource overlay + building overlay)
      */
     private void renderTile(Tile tile, int x, int y) {
         float drawX = x * WorldMap.TILE_SIZE;
@@ -69,6 +71,11 @@ public class MapRenderer {
                 renderHerbOverlay(tile.getHerbNode().getType(), drawX, drawY);
             }
             // Future: add other resource types here (minerals, water, etc.)
+        }
+
+        // Render building overlay if present (on top of everything)
+        if (tile.hasBuilding()) {
+            renderBuildingOverlay(tile.getBuilding(), drawX, drawY);
         }
     }
 
@@ -97,6 +104,26 @@ public class MapRenderer {
     }
 
     /**
+     * Renders a simple debug overlay for a building on this tile.
+     */
+    private void renderBuildingOverlay(Building building, float x, float y) {
+        if (building == null || building.getType() == null) return;
+
+        Color buildingColor = getBuildingColor(building.getType());
+        shapeRenderer.setColor(buildingColor);
+
+        float padding = WorldMap.TILE_SIZE * 0.15f;
+        float size = WorldMap.TILE_SIZE - 2 * padding;
+
+        shapeRenderer.rect(
+            x + padding,
+            y + padding,
+            size,
+            size
+        );
+    }
+
+    /**
      * Gets the color for a specific biome type
      */
     private void getBiomeColor(BiomeType biome, Color outColor) {
@@ -105,6 +132,22 @@ public class MapRenderer {
             outColor.set(def.getVisual().getColor());
         } else {
             outColor.set(Color.GRAY);
+        }
+    }
+
+    /**
+     * Gets a debug color for a specific building type.
+     */
+    private Color getBuildingColor(BuildingType type) {
+        switch (type) {
+            case HARVESTER:
+                return tempColor.set(0.95f, 0.6f, 0.2f, 1f); // bright orange
+            case DRYING_RACK:
+                return tempColor.set(0.6f, 0.4f, 0.2f, 1f);  // brown
+            case STORAGE:
+                return tempColor.set(0.5f, 0.5f, 0.5f, 1f);  // gray
+            default:
+                return tempColor.set(Color.MAGENTA);
         }
     }
 

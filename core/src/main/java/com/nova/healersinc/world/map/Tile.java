@@ -48,6 +48,21 @@ public class Tile {
         return resourceNode != null;
     }
 
+    // === BUILDING METHODS ===
+
+    public Building getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(Building building) {
+        this.building = building;
+    }
+
+    public boolean hasBuilding() {
+        return building != null;
+    }
+
+
     // === BACKWARD COMPATIBILITY METHODS ===
 
     /**
@@ -79,17 +94,5 @@ public class Tile {
     @Deprecated
     public boolean isHerbNode() {
         return resourceNode instanceof HerbNode;
-    }
-
-    public Building getBuilding() {
-        return building;
-    }
-
-    public void setBuilding(Building building) {
-        this.building = building;
-    }
-
-    public boolean hasBuilding() {
-        return building != null;
     }
 }
