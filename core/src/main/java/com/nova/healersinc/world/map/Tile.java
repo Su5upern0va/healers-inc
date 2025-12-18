@@ -1,5 +1,6 @@
 package com.nova.healersinc.world.map;
 
+import com.nova.healersinc.building.Building;
 import com.nova.healersinc.world.biome.BiomeType;
 import com.nova.healersinc.world.herb.HerbNode;
 import com.nova.healersinc.world.resource.ResourceNode;
@@ -10,6 +11,7 @@ public class Tile {
 
     public BiomeType biome;
     private ResourceNode<?> resourceNode;
+    private Building building;
 
     public Tile(int x, int y, BiomeType biome) {
         this.x = x;
@@ -45,6 +47,21 @@ public class Tile {
     public boolean hasResourceNode() {
         return resourceNode != null;
     }
+
+    // === BUILDING METHODS ===
+
+    public Building getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(Building building) {
+        this.building = building;
+    }
+
+    public boolean hasBuilding() {
+        return building != null;
+    }
+
 
     // === BACKWARD COMPATIBILITY METHODS ===
 
