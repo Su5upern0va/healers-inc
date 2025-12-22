@@ -85,7 +85,7 @@ public class TitleScreen {
 
         // Full background gradient approximation using two rects
         shapes.setColor(0.69f, 0.93f, 0.86f, 1f); //light teal top
-        shapes.rect(0, 0, VIRTUAL_WIDTH / 2f, VIRTUAL_HEIGHT / 2f);
+        shapes.rect(0, VIRTUAL_HEIGHT / 2f, VIRTUAL_WIDTH, VIRTUAL_HEIGHT / 2f);
 
         shapes.setColor(0.93f, 1f, 1f, 1f); // almost white bottom
         shapes.rect(0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT / 2f);
@@ -128,7 +128,7 @@ public class TitleScreen {
         font.getData().setScale(0.9f);
         font.draw(
           batch,
-          "Press any key to contune...",
+          "Press any key to continue...",
           0,
           40f,
           VIRTUAL_WIDTH,
