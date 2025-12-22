@@ -9,6 +9,7 @@ import com.nova.healersinc.camera.GameCamera;
 import com.nova.healersinc.interaction.TileInteractionHandler;
 import com.nova.healersinc.render.MapRenderer;
 import com.nova.healersinc.ui.GameUI;
+import com.nova.healersinc.ui.LoadingScreen;
 import com.nova.healersinc.ui.TitleScreen;
 import com.nova.healersinc.world.biome.BiomeRegistry;
 import com.nova.healersinc.world.resource.ResourceRegistry;
@@ -19,6 +20,7 @@ public class HealersIncGame extends ApplicationAdapter {
 
     private enum GameState {
         TITLE,
+        LOADING,
         PLAYING
     }
 
@@ -32,7 +34,13 @@ public class HealersIncGame extends ApplicationAdapter {
     private BuildingManager buildingManager;
 
     private TitleScreen titleScreen;
+    private LoadingScreen loadingScreen;
     private InputMultiplexer inputMultiplexer;
+
+    // Loading state variables
+    private boolean isLoadingStartet = false;
+    private int loadingStep = 0;
+    private static final int NUM_LOADING_STEPS = 5;
 
     @Override
     public void create() {
@@ -45,7 +53,7 @@ public class HealersIncGame extends ApplicationAdapter {
             @Override
             public void onStartGame() {
                 if (gameState == GameState.TITLE) {
-                    startGame();
+                    transitionToLoading();
                 }
             }
         });
@@ -60,29 +68,83 @@ public class HealersIncGame extends ApplicationAdapter {
         titleScreen.resize(w, h);
     }
 
-    private void startGame() {
-        gameState = GameState.PLAYING;
-
-        WorldGenerator generator = new WorldGenerator(69161L);
-        worldMap = generator.generate(500, 500);
-
-        gameCamera = new GameCamera(640, 480, worldMap);
-        mapRenderer = new MapRenderer();
-        buildingManager = new BuildingManager(worldMap);
-
-        gameUI = new GameUI();
-        tileInteractionHandler = new TileInteractionHandler(worldMap, gameCamera, gameUI, buildingManager);
-
-        // Rebuild input chain: Stage first, then tile interaction, then camera pan/zoom
-        inputMultiplexer.clear();
-        inputMultiplexer.addProcessor(gameUI.getStage());
-        inputMultiplexer.addProcessor(tileInteractionHandler);
-        inputMultiplexer.addProcessor(gameCamera.getInputProcessor());
+    private void transitionToLoading() {
+        gameState = GameState.LOADING;
+        loadingScreen = new LoadingScreen();
 
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
-        gameCamera.resize(w, h);
-        gameUI.resize(w, h);
+        loadingScreen.resize(w, h);
+
+        isLoadingStartet = true;
+        loadingStep = 0;
+    }
+
+    private void updateLoading() {
+        if (!isLoadingStartet) {
+            isLoadingStartet = true;
+            loadingStep = 0;
+        }
+
+        // Simulate loading steps
+        switch (loadingStep) {
+            case 0:
+                loadingScreen.setStatus("Generating world...");
+                loadingScreen.setProgress(0.2f);
+                WorldGenerator generator = new WorldGenerator(69161L);
+                worldMap = generator.generate(500, 500);
+                loadingStep++;
+                break;
+
+            case 1:
+                loadingScreen.setStatus("Initializing camera... ");
+                loadingScreen.setProgress(0.4f);
+                gameCamera = new GameCamera(640, 480, worldMap);
+                loadingStep++;
+                break;
+
+            case 2:
+                loadingScreen.setStatus("Loading renderer...");
+                loadingScreen.setProgress(0.6f);
+                mapRenderer = new MapRenderer();
+                buildingManager = new BuildingManager(worldMap);
+                loadingStep++;
+                break;
+
+            case 3:
+                loadingScreen.setStatus("Setting up UI...");
+                loadingScreen.setProgress(0.8f);
+                gameUI = new GameUI();
+                tileInteractionHandler = new TileInteractionHandler(worldMap, gameCamera, gameUI, buildingManager);
+                loadingStep++;
+                break;
+
+            case 4:
+                loadingScreen.setStatus("Finalizing...");
+                loadingScreen.setProgress(1.0f);
+
+                // Rebuild input chain: Stage first, then tile interaction, then camera pan/zoom
+                inputMultiplexer.clear();
+                inputMultiplexer.addProcessor(gameUI.getStage());
+                inputMultiplexer.addProcessor(tileInteractionHandler);
+                inputMultiplexer.addProcessor(gameCamera.getInputProcessor());
+
+                int w = Gdx.graphics.getWidth();
+                int h = Gdx.graphics.getHeight();
+                gameCamera.resize(w, h);
+                gameUI.resize(w, h);
+
+                loadingStep++;
+                break;
+
+            case 5:
+                gameState = GameState.PLAYING;
+                if (loadingScreen != null) {
+                    loadingScreen.dispose();
+                    loadingScreen = null;
+                }
+                break;
+        }
     }
 
     @Override
@@ -91,6 +153,14 @@ public class HealersIncGame extends ApplicationAdapter {
 
         if (gameState == GameState.TITLE) {
             titleScreen.render(delta);
+            return;
+        }
+
+        if (gameState == GameState.LOADING) {
+            updateLoading();
+            if (loadingScreen != null) {
+                loadingScreen.render(delta);
+            }
             return;
         }
 
@@ -112,6 +182,9 @@ public class HealersIncGame extends ApplicationAdapter {
         if (titleScreen != null) {
             titleScreen.resize(width, height);
         }
+        if (loadingScreen != null) {
+            loadingScreen.resize(width, height);
+        }
         if (gameCamera != null) {
             gameCamera.resize(width, height);
         }
@@ -125,5 +198,6 @@ public class HealersIncGame extends ApplicationAdapter {
         if (mapRenderer != null) mapRenderer.dispose();
         if (gameUI != null) gameUI.dispose();
         if (titleScreen != null) titleScreen.dispose();
+        if (loadingScreen != null) loadingScreen.dispose();
     }
 }
