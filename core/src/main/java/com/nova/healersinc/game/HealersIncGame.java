@@ -19,11 +19,11 @@ import com.nova.healersinc.world.map.WorldMap;
 public class HealersIncGame extends ApplicationAdapter {
 
     private enum GameState {
-        TILE,
+        TITLE,
         PLAYING
     }
 
-    private GameState gameState = GameState.TILE;
+    private GameState gameState = GameState.TITLE;
 
     private WorldMap worldMap;
     private GameCamera gameCamera;
@@ -41,17 +41,17 @@ public class HealersIncGame extends ApplicationAdapter {
         ResourceRegistry.init();
         BiomeRegistry.init();
 
-        // Create title screen first
+        // Create the title screen first
         titleScreen = new TitleScreen(new TitleScreen.Listener() {
             @Override
             public void onStartGame() {
-                if (gameState == GameState.TILE) {
+                if (gameState == GameState.TITLE) {
                     startGame();
                 }
             }
         });
 
-        InputMultiplexer inputMultipexer = new InputMultiplexer();
+        InputMultiplexer inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(titleScreen.getInputProcessor());
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
@@ -82,7 +82,7 @@ public class HealersIncGame extends ApplicationAdapter {
     public void render() {
         float delta = Gdx.graphics.getDeltaTime();
 
-        if (gameState == GameState.TILE) {
+        if (gameState == GameState.TITLE) {
             titleScreen.render(delta);
             return;
         }
