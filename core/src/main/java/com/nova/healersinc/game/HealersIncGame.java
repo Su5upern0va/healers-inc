@@ -17,12 +17,18 @@ import com.nova.healersinc.world.map.WorldMap;
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class HealersIncGame extends ApplicationAdapter {
 
+    private enum GameState {
+        TILE,
+        PLAYING
+    }
+
     private WorldMap worldMap;
     private GameCamera gameCamera;
     private MapRenderer mapRenderer;
     private GameUI gameUI;
     private TileInteractionHandler tileInteractionHandler;
     private BuildingManager buildingManager;
+    private GameState gameState = GameState.TILE;
 
     @Override
     public void create() {
