@@ -9,6 +9,7 @@ import com.nova.healersinc.camera.GameCamera;
 import com.nova.healersinc.interaction.TileInteractionHandler;
 import com.nova.healersinc.render.MapRenderer;
 import com.nova.healersinc.ui.GameUI;
+import com.nova.healersinc.ui.TitleScreen;
 import com.nova.healersinc.world.biome.BiomeRegistry;
 import com.nova.healersinc.world.resource.ResourceRegistry;
 import com.nova.healersinc.world.map.WorldGenerator;
@@ -22,19 +23,41 @@ public class HealersIncGame extends ApplicationAdapter {
         PLAYING
     }
 
+    private GameState gameState = GameState.TILE;
+
     private WorldMap worldMap;
     private GameCamera gameCamera;
     private MapRenderer mapRenderer;
     private GameUI gameUI;
     private TileInteractionHandler tileInteractionHandler;
     private BuildingManager buildingManager;
-    private GameState gameState = GameState.TILE;
+
+    private TitleScreen titleScreen;
+    private InputMultiplexer inputMultiplexer;
 
     @Override
     public void create() {
 
         ResourceRegistry.init();
         BiomeRegistry.init();
+
+        // Create title screen first
+        titleScreen = new TitleScreen(new TitleScreen.Listener() {
+            @Override
+            public void onStartGame() {
+                if (gameState == GameState.TILE) {
+                    startGame();
+                }
+            }
+        });
+
+        InputMultiplexer inputMultipexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(titleScreen.getInputProcessor());
+        Gdx.input.setInputProcessor(inputMultiplexer);
+    }
+
+    private void startGame() {
+        gameState = GameState.PLAYING;
         WorldGenerator generator = new WorldGenerator(69161L);
         worldMap = generator.generate(500, 500);
 
@@ -49,16 +72,22 @@ public class HealersIncGame extends ApplicationAdapter {
         tileInteractionHandler = new TileInteractionHandler(worldMap, gameCamera, gameUI, buildingManager);
 
         // Setup input multiplexer: Stage first, then tile interaction, then camera pan/zoom
-        InputMultiplexer multiplexer = new InputMultiplexer();
-        multiplexer.addProcessor(gameUI.getStage());
-        multiplexer.addProcessor(tileInteractionHandler);
-        multiplexer.addProcessor(gameCamera.getInputProcessor());
-        Gdx.input.setInputProcessor(multiplexer);
+        inputMultiplexer.clear();
+        inputMultiplexer.addProcessor(gameUI.getStage());
+        inputMultiplexer.addProcessor(tileInteractionHandler);
+        inputMultiplexer.addProcessor(gameCamera.getInputProcessor());
     }
 
     @Override
     public void render() {
         float delta = Gdx.graphics.getDeltaTime();
+
+        if (gameState == GameState.TILE) {
+            titleScreen.render(delta);
+            return;
+        }
+
+        // PLAYING state
         gameCamera.update(delta);
 
         // Update tile hover detection
@@ -68,7 +97,7 @@ public class HealersIncGame extends ApplicationAdapter {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Apply viewport to set up correct glViewport with letterboxing
+        // Apply viewport to set up the correct glViewport with letterboxing
         gameCamera.getViewport().apply();
 
         // Update buildings
@@ -83,13 +112,21 @@ public class HealersIncGame extends ApplicationAdapter {
 
     @Override
     public void resize(int width, int height) {
-        gameCamera.resize(width, height);
-        gameUI.resize(width, height);
+        if (titleScreen != null) {
+            titleScreen.resize(width, height);
+        }
+        if (gameCamera != null) {
+            gameCamera.resize(width, height);
+        }
+        if (gameUI != null) {
+            gameUI.resize(width, height);
+        }
     }
 
     @Override
     public void dispose() {
-        mapRenderer.dispose();
-        gameUI.dispose();
+        if (mapRenderer != null) mapRenderer.dispose();
+        if (gameUI != null) gameUI.dispose();
+        if (titleScreen != null) titleScreen.dispose();
     }
 }
