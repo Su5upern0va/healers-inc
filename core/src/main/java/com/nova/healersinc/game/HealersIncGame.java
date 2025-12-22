@@ -40,7 +40,7 @@ public class HealersIncGame extends ApplicationAdapter {
         ResourceRegistry.init();
         BiomeRegistry.init();
 
-        // Create title screen first
+        // Create the title screen first
         titleScreen = new TitleScreen(new TitleScreen.Listener() {
             @Override
             public void onStartGame() {
@@ -54,6 +54,10 @@ public class HealersIncGame extends ApplicationAdapter {
         inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(titleScreen.getInputProcessor());
         Gdx.input.setInputProcessor(inputMultiplexer);
+
+        int w = Gdx.graphics.getWidth();
+        int h = Gdx.graphics.getHeight();
+        titleScreen.resize(w, h);
     }
 
     private void startGame() {
