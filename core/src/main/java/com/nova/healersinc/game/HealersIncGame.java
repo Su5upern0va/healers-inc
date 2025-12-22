@@ -74,6 +74,11 @@ public class HealersIncGame extends ApplicationAdapter {
         inputMultiplexer.addProcessor(gameUI.getStage());
         inputMultiplexer.addProcessor(tileInteractionHandler);
         inputMultiplexer.addProcessor(gameCamera.getInputProcessor());
+
+        int w = Gdx.graphics.getWidth();
+        int h = Gdx.graphics.getHeight();
+        gameCamera.resize(w, h);
+        gameUI.resize(w, h);
     }
 
     @Override
