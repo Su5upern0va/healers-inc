@@ -18,8 +18,8 @@ public class TitleScreen {
         void onStartGame();
     }
 
-    private static final float VIRTUAL_WIDTH = 1280;
-    private static final float VIRTUAL_HEIGHT = 720;
+    private static final float VIRTUAL_WIDTH = 640f;
+    private static final float VIRTUAL_HEIGHT = 480f;
 
     private final Listener listener;
 
@@ -84,10 +84,10 @@ public class TitleScreen {
         shapes.begin(ShapeRenderer.ShapeType.Filled);
 
         // Full background gradient approximation using two rects
-        shapes.setColor(0.69f, 0.93f, 0.86f, 1f); //light teal top
+        shapes.setColor(0.69f, 0.93f, 0.86f, 1f);
         shapes.rect(0, VIRTUAL_HEIGHT / 2f, VIRTUAL_WIDTH, VIRTUAL_HEIGHT / 2f);
 
-        shapes.setColor(0.93f, 1f, 1f, 1f); // almost white bottom
+        shapes.setColor(0.93f, 1f, 1f, 1f);
         shapes.rect(0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT / 2f);
 
         // Logo placeholder
