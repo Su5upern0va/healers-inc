@@ -15,7 +15,6 @@ import com.nova.healersinc.world.resource.ResourceRegistry;
 import com.nova.healersinc.world.map.WorldGenerator;
 import com.nova.healersinc.world.map.WorldMap;
 
-/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class HealersIncGame extends ApplicationAdapter {
 
     private enum GameState {
@@ -41,7 +40,7 @@ public class HealersIncGame extends ApplicationAdapter {
         ResourceRegistry.init();
         BiomeRegistry.init();
 
-        // Create the title screen first
+        // Create title screen first
         titleScreen = new TitleScreen(new TitleScreen.Listener() {
             @Override
             public void onStartGame() {
@@ -51,13 +50,15 @@ public class HealersIncGame extends ApplicationAdapter {
             }
         });
 
-        InputMultiplexer inputMultiplexer = new InputMultiplexer();
+        // IMPORTANT: assign to the field, not a new local variable
+        inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(titleScreen.getInputProcessor());
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
     private void startGame() {
         gameState = GameState.PLAYING;
+
         WorldGenerator generator = new WorldGenerator(69161L);
         worldMap = generator.generate(500, 500);
 
@@ -65,13 +66,10 @@ public class HealersIncGame extends ApplicationAdapter {
         mapRenderer = new MapRenderer();
         buildingManager = new BuildingManager(worldMap);
 
-        // Initialize UI layer
         gameUI = new GameUI();
-
-        // Initialize tile interaction handler
         tileInteractionHandler = new TileInteractionHandler(worldMap, gameCamera, gameUI, buildingManager);
 
-        // Setup input multiplexer: Stage first, then tile interaction, then camera pan/zoom
+        // Rebuild input chain: Stage first, then tile interaction, then camera pan/zoom
         inputMultiplexer.clear();
         inputMultiplexer.addProcessor(gameUI.getStage());
         inputMultiplexer.addProcessor(tileInteractionHandler);
@@ -87,26 +85,16 @@ public class HealersIncGame extends ApplicationAdapter {
             return;
         }
 
-        // PLAYING state
         gameCamera.update(delta);
-
-        // Update tile hover detection
         tileInteractionHandler.updateHover();
 
-        // Clear full screen (black letterbox areas)
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Apply viewport to set up the correct glViewport with letterboxing
         gameCamera.getViewport().apply();
 
-        // Update buildings
         buildingManager.update(delta);
-
-        // Render world
         mapRenderer.render(worldMap, gameCamera.getCamera());
-
-        // Render UI on top (uses its own ScreenViewport)
         gameUI.render();
     }
 
