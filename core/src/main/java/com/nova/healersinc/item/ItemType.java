@@ -1,7 +1,7 @@
 package com.nova.healersinc.item;
 
 public enum ItemType {
-    FRESH_HERB("Fresh Herb");
+    FRESH_HERB("Fresh Herb"),
     DRIED_HERB("Dried Herb");
 
     private final String displayName;
