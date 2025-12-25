@@ -3,7 +3,8 @@ package com.nova.healersinc.building;
 public enum BuildingType {
     HARVESTER("Harvester", "Harvests herbs from nearby nodes", 100),
     DRYING_RACK("Drying Rack", "Dries fresh herbs", 150),
-    STORAGE("Storage", "Stores items", 50);
+    STORAGE("Storage", "Stores items", 50),
+    CONVEYOR("Conveyor", "Transports items", 10);
 
     private final String displayName;
     private final String description;
